@@ -28,4 +28,18 @@ export class AppService {
       image: files.map((file) => file.filename).join(';'),
     };
   }
+
+  uploadFileMultiple(
+    body: SampleDto,
+    files: {
+      avatar?: Express.Multer.File[];
+      background?: Express.Multer.File[];
+    },
+  ) {
+    return {
+      ...body,
+      avatar: files.avatar?.map((file) => file.filename).join(';'),
+      background: files.background?.map((file) => file.filename).join(';'),
+    };
+  }
 }

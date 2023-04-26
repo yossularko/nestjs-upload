@@ -9,7 +9,11 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 import { AppService } from './app.service';
 import { SampleDto } from './sample.dto';
 import { fileType } from './utils/fileTypeRegExp';
@@ -65,5 +69,30 @@ export class AppController {
     files: Array<Express.Multer.File>,
   ) {
     return this.appService.uploadFileArray(body, files);
+  }
+
+  @Post('file/multiple')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'avatar', maxCount: 1 },
+      { name: 'background', maxCount: 1 },
+    ]),
+  )
+  uploadFileMultiple(
+    @Body() body: SampleDto,
+    @UploadedFiles(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({ fileType })
+        .addMaxSizeValidator({ maxSize })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    files: {
+      avatar?: Express.Multer.File[];
+      background?: Express.Multer.File[];
+    },
+  ) {
+    return this.appService.uploadFileMultiple(body, files);
   }
 }
