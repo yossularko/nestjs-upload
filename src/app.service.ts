@@ -21,4 +21,11 @@ export class AppService {
       image: file.filename,
     };
   }
+
+  uploadFileArray(body: SampleDto, files: Array<Express.Multer.File>) {
+    return {
+      ...body,
+      image: files.map((file) => file.filename).join(';'),
+    };
+  }
 }
