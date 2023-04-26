@@ -14,4 +14,11 @@ export class AppService {
       file: file.buffer.toString(),
     };
   }
+
+  uploadFileSingle(body: SampleDto, file: Express.Multer.File) {
+    return {
+      ...body,
+      image: file.filename,
+    };
+  }
 }
