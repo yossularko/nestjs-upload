@@ -10,8 +10,8 @@ export class AppService {
   uploadFile(body: SampleDto, file: Express.Multer.File) {
     return {
       ...body,
-      image: file.originalname,
-      file: file.buffer.toString(),
+      image: file.filename,
+      // file: file.buffer.toString(),
     };
   }
 
