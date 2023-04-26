@@ -80,14 +80,7 @@ export class AppController {
   )
   uploadFileMultiple(
     @Body() body: SampleDto,
-    @UploadedFiles(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({ fileType })
-        .addMaxSizeValidator({ maxSize })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
+    @UploadedFiles()
     files: {
       avatar?: Express.Multer.File[];
       background?: Express.Multer.File[];

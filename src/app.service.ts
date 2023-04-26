@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SampleDto } from './sample.dto';
 
 @Injectable()
@@ -36,6 +36,13 @@ export class AppService {
       background?: Express.Multer.File[];
     },
   ) {
+    if (!files.avatar) {
+      throw new BadRequestException('Avatar cannot be Empty!');
+    }
+    if (!files.background) {
+      throw new BadRequestException('Background cannot be Empty!');
+    }
+
     return {
       ...body,
       avatar: files.avatar?.map((file) => file.filename).join(';'),
