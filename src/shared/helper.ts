@@ -6,15 +6,15 @@ export class Helper {
     file: Express.Multer.File,
     callback: (error: Error | null, destination: string) => void,
   ) {
+    const { originalname } = file;
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    let fileExtension = '';
-    if (file.mimetype.indexOf('jpeg') > -1) {
-      fileExtension = 'jpg';
-    } else if (file.mimetype.indexOf('png') > -1) {
-      fileExtension = 'png';
-    }
-    const originalName = file.originalname.split('.')[0];
-    callback(null, originalName + '-' + uniqueSuffix + '.' + fileExtension);
+    const extFile = originalname.substring(
+      originalname.lastIndexOf('.') + 1,
+      originalname.length,
+    );
+
+    const originalName = originalname.split('.')[0];
+    callback(null, originalName + '-' + uniqueSuffix + '.' + extFile);
   }
 
   static destinationPath(
