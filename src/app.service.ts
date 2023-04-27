@@ -1,5 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { SampleDto } from './sample.dto';
+import * as fs from 'fs';
 
 @Injectable()
 export class AppService {
@@ -48,5 +54,22 @@ export class AppService {
       avatar: files.avatar?.map((file) => file.filename).join(';'),
       background: files.background?.map((file) => file.filename).join(';'),
     };
+  }
+
+  async deleteFile(filePath: string) {
+    try {
+      await fs.promises.unlink(`./public/${filePath}`);
+      return { message: `${filePath} was deleted` };
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      if (err) {
+        if (err.code === 'ENOENT') {
+          throw new NotFoundException(`${filePath} is not found`);
+        }
+
+        throw new InternalServerErrorException(err.message);
+      }
+      throw new InternalServerErrorException(error);
+    }
   }
 }
