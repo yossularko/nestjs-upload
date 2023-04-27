@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import folderPath from 'src/utils/folderPath';
 
 export class Helper {
   static customFileName(
@@ -22,6 +23,6 @@ export class Helper {
     file: Express.Multer.File,
     callback: (error: Error | null, filename: string) => void,
   ) {
-    callback(null, './public/');
+    callback(null, `./public/${folderPath}`);
   }
 }

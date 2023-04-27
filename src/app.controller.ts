@@ -4,9 +4,9 @@ import {
   Delete,
   Get,
   HttpStatus,
-  Param,
   ParseFilePipeBuilder,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -91,8 +91,8 @@ export class AppController {
     return this.appService.uploadFileMultiple(body, files);
   }
 
-  @Delete(`file/:filePath`)
-  deleteFile(@Param('filePath') filePath: string) {
+  @Delete('file')
+  deleteFile(@Query('filePath') filePath: string) {
     return this.appService.deleteFile(filePath);
   }
 }

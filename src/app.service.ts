@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { SampleDto } from './sample.dto';
 import * as fs from 'fs';
+import folderPath from './utils/folderPath';
 
 @Injectable()
 export class AppService {
@@ -16,7 +17,7 @@ export class AppService {
   uploadFile(body: SampleDto, file: Express.Multer.File) {
     return {
       ...body,
-      image: file.filename,
+      image: `/${folderPath}/${file.filename}`,
       // file: file.buffer.toString(),
     };
   }
@@ -24,14 +25,14 @@ export class AppService {
   uploadFileSingle(body: SampleDto, file: Express.Multer.File) {
     return {
       ...body,
-      image: file.filename,
+      image: `/${folderPath}/${file.filename}`,
     };
   }
 
   uploadFileArray(body: SampleDto, files: Array<Express.Multer.File>) {
     return {
       ...body,
-      image: files.map((file) => file.filename).join(';'),
+      image: files.map((file) => `/${folderPath}/${file.filename}`).join(';'),
     };
   }
 
@@ -51,14 +52,18 @@ export class AppService {
 
     return {
       ...body,
-      avatar: files.avatar?.map((file) => file.filename).join(';'),
-      background: files.background?.map((file) => file.filename).join(';'),
+      avatar: files.avatar
+        ?.map((file) => `/${folderPath}/${file.filename}`)
+        .join(';'),
+      background: files.background
+        ?.map((file) => `/${folderPath}/${file.filename}`)
+        .join(';'),
     };
   }
 
   async deleteFile(filePath: string) {
     try {
-      await fs.promises.unlink(`./public/${filePath}`);
+      await fs.promises.unlink('./public' + filePath);
       return { message: `${filePath} was deleted` };
     } catch (error) {
       const err = error as NodeJS.ErrnoException;
