@@ -95,4 +95,9 @@ export class AppController {
   deleteFile(@Query('filePath') filePath: string) {
     return this.appService.deleteFile(filePath);
   }
+
+  @Delete('file/array')
+  deleteFileMultiple(@Body('files') files: string) {
+    return this.appService.deleteFileMultiple(files);
+  }
 }

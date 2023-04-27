@@ -77,4 +77,28 @@ export class AppService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async deleteFileMultiple(files: string) {
+    const fileArr = files.split(';');
+
+    try {
+      await Promise.all(
+        fileArr.map(async (filePath) => {
+          await fs.promises.unlink('./public' + filePath);
+        }),
+      );
+
+      return { message: 'Success, files was deleted' };
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      if (err) {
+        if (err.code === 'ENOENT') {
+          throw new NotFoundException(err.message);
+        }
+
+        throw new InternalServerErrorException(err.message);
+      }
+      throw new InternalServerErrorException(error);
+    }
+  }
 }
