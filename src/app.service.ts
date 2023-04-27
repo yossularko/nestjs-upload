@@ -32,7 +32,7 @@ export class AppService {
   uploadFileArray(body: SampleDto, files: Array<Express.Multer.File>) {
     return {
       ...body,
-      image: files.map((file) => `/${folderPath}/${file.filename}`).join(';'),
+      images: files.map((file) => `/${folderPath}/${file.filename}`).join(';'),
     };
   }
 
